@@ -1,44 +1,45 @@
-# Engaja — criação de conta
+# Engaja — Account Creation
 
-Aplicação Next.js para o fluxo inicial de criação de contas, com formulário
-validado no cliente e na API e persistência no Supabase.
+Next.js application for the initial account creation flow, with a form validated
+on the client and by the API, and data persisted in Supabase.
 
-## Requisitos
+## Requirements
 
-- Bun (versão indicada no `package.json`)
-- Um projeto Supabase com a migration deste repositório aplicada
+- Bun (version specified in `package.json`)
+- A Supabase project with this repository's migration applied
 
-## Configuração
+## Setup
 
-1. Instale as dependências:
+1. Install the dependencies:
 
    ```bash
    bun install
    ```
 
-2. Copie `.env.example` para `.env.local` e configure `SUPABASE_URL` e
-   `SUPABASE_SERVICE_ROLE_KEY`. A chave de service role deve permanecer apenas
-   no servidor e nunca ser exposta em variáveis `NEXT_PUBLIC_*`.
-3. Aplique `supabase/migrations/20261019000000_create_accounts.sql` ao projeto
-   Supabase.
-4. Inicie o servidor local:
+2. Copy `.env.example` to `.env.local` and configure `SUPABASE_URL` and
+   `SUPABASE_SERVICE_ROLE_KEY`. The service role key must remain on the server
+   and must never be exposed in `NEXT_PUBLIC_*` variables.
+3. Apply `supabase/migrations/20261019000000_create_accounts.sql` to your
+  Supabase project.
+4. Start the local server:
 
    ```bash
    bun run dev
    ```
 
-Abra [http://localhost:3000/auth/sign-up](http://localhost:3000/auth/sign-up).
+Open [http://localhost:3000/auth/sign-up](http://localhost:3000/auth/sign-up).
 
-## Rotas
+## Routes
 
-- `GET /auth/sign-up`: formulário de criação de conta.
-- `POST /api/v1/sign-up`: valida os dados, gera hash bcrypt e cria a conta.
-- `GET /auth/sign-up/success`: confirmação de cadastro.
+- `GET /auth/sign-up`: account creation form.
+- `POST /api/v1/sign-up`: validates the data, generates a bcrypt hash, and
+  creates the account.
+- `GET /auth/sign-up/success`: sign-up confirmation.
 
-O endpoint retorna `400` para dados inválidos, `409` para email já cadastrado,
-`201` para criação e `500` para falhas inesperadas.
+The endpoint returns `400` for invalid data, `409` if the email is already
+registered, `201` when the account is created, and `500` for unexpected errors.
 
-## Verificações
+## Checks
 
 ```bash
 bun run typecheck
