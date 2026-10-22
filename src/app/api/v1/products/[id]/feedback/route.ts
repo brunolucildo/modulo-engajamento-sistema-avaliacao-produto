@@ -2,6 +2,8 @@ import { nanoid } from "nanoid";
 import { NextResponse } from "next/server";
 import { getCurrentUser, type SessionUser } from "@/lib/auth-session";
 import { feedbackSchema } from "@/lib/feedback-schema";
+import { listProductFeedbacks } from "@/lib/product-feedback";
+import { getProductSummary } from "@/lib/product-summary";
 import { createSupabaseAdmin } from "@/lib/supabase-admin";
 
 export const runtime = "nodejs";
@@ -34,22 +36,8 @@ export async function GET(_request: Request, { params }: RouteContext) {
       );
     }
 
-    const { data: feedbacks, error } = await supabase
-      .from("products_feedbacks")
-      .select("id, score, comment, created_at")
-      .eq("product_id", id)
-      .order("created_at", { ascending: false })
-      .order("id", { ascending: false });
-
-    if (error) {
-      console.error("Failed to load product feedback:", error);
-      return NextResponse.json(
-        { error: "Não foi possível carregar as avaliações agora." },
-        { status: 500 },
-      );
-    }
-
-    return NextResponse.json({ feedbacks: feedbacks ?? [] });
+    const feedbacks = await listProductFeedbacks(id);
+    return NextResponse.json({ feedbacks });
   } catch (error) {
     console.error("Feedback GET request failed:", error);
     return NextResponse.json(
@@ -106,7 +94,7 @@ export async function POST(request: Request, { params }: RouteContext) {
     const supabase = createSupabaseAdmin();
     const { data: product, error: productError } = await supabase
       .from("products")
-      .select("id")
+      .select("id, name")
       .eq("id", productId)
       .maybeSingle();
 
@@ -145,7 +133,22 @@ export async function POST(request: Request, { params }: RouteContext) {
       );
     }
 
-    return NextResponse.json({ feedback }, { status: 201 });
+    let summary = {
+      summary: null as string | null,
+      feedbackCount: 0,
+      summaryError: true,
+    };
+    try {
+      const feedbacks = await listProductFeedbacks(productId);
+      summary = await getProductSummary(productId, product.name, feedbacks);
+    } catch (summaryError) {
+      console.error(
+        "Feedback was saved, but its product summary could not be updated:",
+        summaryError,
+      );
+    }
+
+    return NextResponse.json({ feedback, summary }, { status: 201 });
   } catch (error) {
     console.error("Feedback POST request failed:", error);
     return NextResponse.json(

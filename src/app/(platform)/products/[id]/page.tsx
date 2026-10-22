@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { FeedbackPanel } from "@/components/feedback-panel";
 import { getCurrentUser, type SessionUser } from "@/lib/auth-session";
 import type { ProductFeedback } from "@/lib/feedback-schema";
+import { listProductFeedbacks } from "@/lib/product-feedback";
+import { getProductSummary } from "@/lib/product-summary";
 import { createSupabaseAdmin } from "@/lib/supabase-admin";
 import styles from "./page.module.css";
 
@@ -61,30 +63,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   let feedbacks: ProductFeedback[] = [];
   try {
-    const result = await supabase
-      .from("products_feedbacks")
-      .select("id, score, comment, created_at")
-      .eq("product_id", id)
-      .order("created_at", { ascending: false })
-      .order("id", { ascending: false });
-
-    if (result.error) {
-      console.error("Failed to load product feedback:", result.error);
-      return (
-        <div className={styles.page}>
-          <section className={styles.notice} role="alert">
-            <h1>Não foi possível carregar as avaliações</h1>
-            <p>
-              Os detalhes do produto continuam disponíveis. Tente novamente mais
-              tarde.
-            </p>
-            <Link href="/">Voltar aos produtos</Link>
-          </section>
-        </div>
-      );
-    }
-
-    feedbacks = (result.data ?? []) as ProductFeedback[];
+    feedbacks = await listProductFeedbacks(id);
   } catch (error) {
     console.error("Product feedback request failed:", error);
     return (
@@ -99,6 +78,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </section>
       </div>
     );
+  }
+
+  let summary: string | null = null;
+  let summaryFeedbackCount = 0;
+  let summaryError = false;
+  try {
+    const result = await getProductSummary(id, product.name, feedbacks);
+    summary = result.summary;
+    summaryFeedbackCount = result.feedbackCount;
+    summaryError = result.summaryError;
+  } catch (error) {
+    console.error("Product feedback summary request failed:", error);
+    summaryError = true;
   }
 
   return (
@@ -140,6 +132,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <FeedbackPanel
         productId={id}
         initialFeedbacks={feedbacks}
+        initialSummary={summary}
+        initialSummaryFeedbackCount={summaryFeedbackCount}
+        initialSummaryError={summaryError}
         isAuthenticated={Boolean(user)}
       />
     </div>
