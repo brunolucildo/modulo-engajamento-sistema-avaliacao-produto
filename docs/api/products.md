@@ -9,25 +9,33 @@ não houver outra página. Envie o cursor retornado como parâmetro `cursor` na
 próxima requisição. Uma coleção vazia retorna `200` com `products: []` e
 `nextCursor: null`.
 
-Cada produto expõe `id`, `name`, `description`, `image_url` e `external_link`.
+Cada produto expõe `id`, `name`, `price`, `link` e `image`. Os quatro campos
+são strings.
 
 ## Criar produto
 
-`POST /api/v1/products` é uma operação administrativa protegida pelo segredo
-server-side `PRODUCTS_ADMIN_API_KEY`. Envie o valor no cabeçalho
-`Authorization: Bearer <chave>`. A chave não deve ser incluída em aplicações de
-navegador ou variáveis `NEXT_PUBLIC_*`.
+`POST /api/v1/products` é público e não exige autenticação. Qualquer pessoa
+que alcance a API pode cadastrar produtos; considere proteger a rota antes de
+expô-la a tráfego não confiável.
 
-O JSON aceita `name`, `external_link`, `image_url` e `description` opcional.
-URLs de link externo e imagem devem usar HTTP ou HTTPS. A API gera o `id` com
-`nanoid`.
+Envie um JSON com `name`, `price`, `link` e `image`, todos obrigatórios e como
+strings não vazias, sem limite máximo de caracteres definido pela aplicação.
+`link` e `image` devem ser URLs HTTP ou HTTPS. A API gera o `id` com `nanoid`.
 
-As respostas são `201` para criação, `400` para entrada inválida e `401` quando
-a credencial administrativa está ausente ou inválida.
+```json
+{
+  "name": "Nome do produto",
+  "price": "R$ 99,90",
+  "link": "https://www.amazon.com.br/dp/ASIN",
+  "image": "https://m.media-amazon.com/images/...jpg"
+}
+```
+
+As respostas são `201` para criação e `400` para entrada inválida.
 
 ## Banco de dados
 
-A migration `20261021000000_create_products.sql` cria `products` com os campos
-definidos no catálogo, incluindo `image_url`, necessário para a apresentação da
-imagem na Home. O campo `score` permanece booleano conforme a spec e tem valor
-padrão `false`; seu significado não é usado como média ou nota das avaliações.
+A migration `20261022000000_update_products_fields.sql` migra a tabela para os
+campos `name`, `price`, `link` e `image`, preservando os links e imagens já
+cadastrados. Produtos anteriores à migração recebem `price` vazio; a coluna
+`description` é removida, descartando as descrições já cadastradas.

@@ -75,8 +75,10 @@
   line-height: 1.72;
 }
 
-.productCopy .muted {
-  color: #77869a;
+.productCopy .price {
+  color: #172842;
+  font-size: 24px;
+  font-weight: 650;
 }
 
 .productLink {

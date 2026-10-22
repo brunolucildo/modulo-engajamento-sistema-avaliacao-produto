@@ -7,9 +7,9 @@ export const PRODUCTS_PAGE_SIZE = 12;
 export type Product = {
   id: string;
   name: string;
-  description: string | null;
-  image_url: string;
-  external_link: string;
+  price: string;
+  link: string;
+  image: string;
 };
 
 export type ProductCursor = {
@@ -61,7 +61,7 @@ export async function listProducts(cursor: ProductCursor | null = null) {
   const supabase = createSupabaseAdmin();
   let query = supabase
     .from("products")
-    .select("id,name,description,image_url,external_link,created_at")
+    .select("id,name,price,link,image,created_at")
     .order("created_at", { ascending: false })
     .order("id", { ascending: false })
     .limit(PRODUCTS_PAGE_SIZE + 1);
@@ -84,15 +84,13 @@ export async function listProducts(cursor: ProductCursor | null = null) {
   const lastProduct = page.at(-1);
 
   return {
-    products: page.map(
-      ({ id, name, description, image_url, external_link }) => ({
-        id,
-        name,
-        description,
-        image_url,
-        external_link,
-      }),
-    ) satisfies Product[],
+    products: page.map(({ id, name, price, link, image }) => ({
+      id,
+      name,
+      price,
+      link,
+      image,
+    })) satisfies Product[],
     nextCursor:
       hasMore && lastProduct
         ? encodeProductCursor({

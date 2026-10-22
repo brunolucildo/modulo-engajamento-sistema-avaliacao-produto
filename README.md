@@ -24,8 +24,6 @@ after authenticating.
    - `AUTH_SESSION_SECRET` with at least 32 bytes of random data. This signs
      server-validated session cookies; keep it private and rotate it to
      invalidate existing sessions.
-   - `PRODUCTS_ADMIN_API_KEY` with a long, random value. This protects the
-     administrative product-creation endpoint.
 3. Apply the migrations in `supabase/migrations/` to your Supabase project, in
    timestamp order:
    - `20261019000000_create_accounts.sql`
@@ -52,9 +50,10 @@ Open [http://localhost:3000](http://localhost:3000) to browse products.
 - `GET /auth/sign-up/success`: sign-up confirmation.
 - `GET /api/v1/products`: returns `{ "products": [], "nextCursor": null }` for
   the public catalog; accepts an optional `cursor` query parameter.
-- `POST /api/v1/products`: creates a product. Requires
-  `Authorization: Bearer <PRODUCTS_ADMIN_API_KEY>`. The JSON body accepts
-  `name`, `external_link`, `image_url`, and optional `description`.
+- `POST /api/v1/products`: publicly creates products without authentication.
+  The JSON body requires string fields `name`, `price`, `link`, and `image`.
+  Any caller can add products, so protect this endpoint before exposing it to
+  untrusted traffic.
 - `GET /api/v1/products/[id]/feedback`: returns public reviews for a product.
 - `POST /api/v1/products/[id]/feedback`: creates a review for the authenticated
   user. The JSON body accepts an integer `score` from 1 to 5 and a non-empty

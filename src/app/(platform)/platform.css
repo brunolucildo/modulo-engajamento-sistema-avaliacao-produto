@@ -496,13 +496,14 @@
   color: var(--platform-blue);
 }
 
-.product-card-description {
+.product-card-price {
   display: -webkit-box;
   overflow: hidden;
   min-height: 47px;
   margin: 9px 0 17px;
-  color: var(--platform-muted);
+  color: var(--platform-ink);
   font-size: 14px;
+  font-weight: 650;
   line-height: 1.65;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -763,7 +764,7 @@
     font-size: 17px;
   }
 
-  .product-card-description {
+  .product-card-price {
     min-height: 44px;
     margin: 7px 0 13px;
     font-size: 13px;
@@ -823,7 +824,7 @@
     aspect-ratio: 1.8;
   }
 
-  .product-card-description {
+  .product-card-price {
     min-height: 0;
   }
 

@@ -11,15 +11,16 @@ Precisamos impementação o fluxo para listagem de produtos
 ## Requisitos funcionais
 
 1. A home deve listar todos os produtos de forma paginada com infinite lading (scrolling)
-   1. Cada produto deve mostrar o titulo, imagem e uma descrição simples
+   1. Cada produto deve mostrar o titulo, preço e imagem
 2. Precisamos criar uma nova conta no banco de dados na tabela de `products`
    1. `id`: nanoid (gerado com `nanoid` na camada de API)
-   2. `name`: text
-   3. `description`: text (opcional)
-   4. `created_at`: timestamp
-   5. `updated_at`: timestamp
-   6. `score`: boolean
-   7. `external_link`: text
+   2. `name`: string
+   3. `price`: string
+   4. `link`: string
+   5. `image`: string
+   6. `created_at`: timestamp
+   7. `updated_at`: timestamp
+   8. `score`: boolean
 3. A requisição deve ser um `GET` para `/api/v1/products`
 4. Caso tudo dê certo retornar `200` ou array vazio
 5. Ao cliar no nome de um produto devemos navegar para os detalhes do mesmo (iremos construir essa pagina em breve)
@@ -35,7 +36,7 @@ Precisamos impementação o fluxo para listagem de produtos
 - Enriquecer a home existente ou criar uma nova pagina
 - Criar a tabela no banco de dados
 - Criar uma nova migration do Supabase
-- Crier um endpoint para manualmente inserir novos produtos (POST `/products` com name, external_link e imagem)
+- Criar um endpoint para cadastrar produtos (POST `/api/v1/products` com `name`, `price`, `link` e `image`)
 
 ## Você não deve
 

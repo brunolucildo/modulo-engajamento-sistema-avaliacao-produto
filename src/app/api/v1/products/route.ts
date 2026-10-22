@@ -1,4 +1,3 @@
-import { createHash, timingSafeEqual } from "node:crypto";
 import { nanoid } from "nanoid";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -8,10 +7,10 @@ import { createSupabaseAdmin } from "@/lib/supabase-admin";
 export const runtime = "nodejs";
 
 const productInputSchema = z.object({
-  name: z.string().trim().min(1).max(120),
-  description: z.string().trim().max(2000).optional(),
-  external_link: z.string().trim().url().max(2048),
-  image_url: z.string().trim().url().max(2048),
+  name: z.string().trim().min(1),
+  price: z.string().trim().min(1),
+  link: z.string().trim().url(),
+  image: z.string().trim().url(),
 });
 
 function isHttpUrl(value: string) {
@@ -25,25 +24,6 @@ function isHttpUrl(value: string) {
   } catch {
     return false;
   }
-}
-
-function isAuthorized(request: Request) {
-  const expected = process.env.PRODUCTS_ADMIN_API_KEY;
-  if (!expected) {
-    return false;
-  }
-
-  const header = request.headers.get("authorization") ?? "";
-  const match = /^Bearer\s+(.+)$/i.exec(header);
-  const provided = match?.[1]?.trim() ?? "";
-  const expectedDigest = createHash("sha256").update(expected, "utf8").digest();
-  const providedDigest = createHash("sha256").update(provided, "utf8").digest();
-
-  return (
-    provided.length > 0 &&
-    provided.length <= 1024 &&
-    timingSafeEqual(expectedDigest, providedDigest)
-  );
 }
 
 export async function GET(request: Request) {
@@ -71,10 +51,6 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!isAuthorized(request)) {
-    return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
-  }
-
   let body: unknown;
   try {
     body = await request.json();
@@ -88,18 +64,18 @@ export async function POST(request: Request) {
   const validation = productInputSchema.safeParse(body);
   if (
     !validation.success ||
-    !isHttpUrl(validation.data.external_link) ||
-    !isHttpUrl(validation.data.image_url)
+    !isHttpUrl(validation.data.link) ||
+    !isHttpUrl(validation.data.image)
   ) {
     return NextResponse.json(
       {
         error: "Confira os dados informados.",
         fields: validation.success
           ? {
-              external_link: isHttpUrl(validation.data.external_link)
+              link: isHttpUrl(validation.data.link)
                 ? undefined
                 : ["Informe um endereço HTTP ou HTTPS válido."],
-              image_url: isHttpUrl(validation.data.image_url)
+              image: isHttpUrl(validation.data.image)
                 ? undefined
                 : ["Informe um endereço HTTP ou HTTPS válido."],
             }
@@ -116,11 +92,11 @@ export async function POST(request: Request) {
       .insert({
         id: nanoid(),
         name: validation.data.name,
-        description: validation.data.description || null,
-        external_link: validation.data.external_link,
-        image_url: validation.data.image_url,
+        price: validation.data.price,
+        link: validation.data.link,
+        image: validation.data.image,
       })
-      .select("id,name,description,image_url,external_link")
+      .select("id,name,price,link,image")
       .single();
 
     if (error || !data) {

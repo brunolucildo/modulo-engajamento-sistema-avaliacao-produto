@@ -18,9 +18,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
   let product: {
     id: string;
     name: string;
-    description: string | null;
-    image_url: string | null;
-    external_link: string | null;
+    price: string;
+    image: string;
+    link: string;
   } | null = null;
   let productError: unknown;
   let productLoadError = false;
@@ -31,7 +31,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       getCurrentUser(),
       supabase
         .from("products")
-        .select("id, name, description, image_url, external_link")
+        .select("id, name, price, image, link")
         .eq("id", id)
         .maybeSingle(),
     ]);
@@ -107,10 +107,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <span aria-hidden="true">←</span> Todos os produtos
       </Link>
       <article className={styles.product}>
-        {product.image_url ? (
+        {product.image ? (
           <Image
             className={styles.productImage}
-            src={product.image_url}
+            src={product.image}
             alt={`Imagem de ${product.name}`}
             width={800}
             height={640}
@@ -124,23 +124,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
         )}
         <div className={styles.productCopy}>
           <h1>{product.name}</h1>
-          {product.description ? (
-            <p>{product.description}</p>
-          ) : (
-            <p className={styles.muted}>
-              Ainda não há uma descrição para este produto.
-            </p>
-          )}
-          {product.external_link ? (
-            <a
-              className={styles.productLink}
-              href={product.external_link}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Conheça o produto <span aria-hidden="true">↗</span>
-            </a>
-          ) : null}
+          <p className={styles.price}>
+            {product.price || "Preço não informado"}
+          </p>
+          <a
+            className={styles.productLink}
+            href={product.link}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Conheça o produto <span aria-hidden="true">↗</span>
+          </a>
         </div>
       </article>
       <FeedbackPanel

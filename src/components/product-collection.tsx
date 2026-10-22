@@ -34,7 +34,7 @@ function ProductCard({
       <div className="product-card-image-wrap" aria-hidden="true">
         <Image
           className="product-card-image"
-          src={product.image_url}
+          src={product.image}
           alt=""
           fill
           unoptimized
@@ -48,13 +48,12 @@ function ProductCard({
             {product.name}
           </Link>
         </h3>
-        <p className="product-card-description">
-          {product.description ||
-            "Conheça este produto e descubra o que ele pode fazer."}
+        <p className="product-card-price">
+          {product.price || "Preço não informado"}
         </p>
         <a
           className="product-card-link"
-          href={product.external_link}
+          href={product.link}
           target="_blank"
           rel="noreferrer noopener"
         >
