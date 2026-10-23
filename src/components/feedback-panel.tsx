@@ -52,6 +52,7 @@ export function FeedbackPanel({
   );
   const [summaryError, setSummaryError] = useState(initialSummaryError);
   const [score, setScore] = useState<number | null>(null);
+  const [hoveredScore, setHoveredScore] = useState<number | null>(null);
   const [comment, setComment] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -173,7 +174,18 @@ export function FeedbackPanel({
               <legend>Sua nota</legend>
               <div className={styles.scoreOptions}>
                 {[1, 2, 3, 4, 5].map((value) => (
-                  <label className={styles.scoreOption} key={value}>
+                  <label
+                    className={`${styles.scoreOption} ${
+                      value <= (hoveredScore ?? score ?? 0)
+                        ? styles.scoreOptionActive
+                        : ""
+                    }`}
+                    key={value}
+                    onMouseEnter={() => setHoveredScore(value)}
+                    onMouseLeave={() => setHoveredScore(null)}
+                    onFocus={() => setHoveredScore(value)}
+                    onBlur={() => setHoveredScore(null)}
+                  >
                     <input
                       type="radio"
                       name="score"

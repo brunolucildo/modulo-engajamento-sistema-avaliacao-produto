@@ -10,6 +10,8 @@ export type Product = {
   price: string;
   link: string;
   image: string;
+  averageScore: number | null;
+  feedbackCount: number;
 };
 
 export type ProductCursor = {
@@ -82,15 +84,44 @@ export async function listProducts(cursor: ProductCursor | null = null) {
   const hasMore = rows.length > PRODUCTS_PAGE_SIZE;
   const page = rows.slice(0, PRODUCTS_PAGE_SIZE);
   const lastProduct = page.at(-1);
+  const productIds = page.map(({ id }) => id);
+  const ratingsByProductId = new Map<
+    string,
+    { averageScore: number; feedbackCount: number }
+  >();
+
+  if (productIds.length > 0) {
+    const { data: ratings, error: ratingsError } = await supabase
+      .from("product_feedback_ratings")
+      .select("product_id, average_score, feedback_count")
+      .in("product_id", productIds);
+
+    if (ratingsError) {
+      console.error("Failed to query product feedback ratings:", ratingsError);
+      throw new Error("Could not retrieve product feedback ratings.");
+    }
+
+    for (const rating of ratings ?? []) {
+      ratingsByProductId.set(rating.product_id, {
+        averageScore: rating.average_score,
+        feedbackCount: rating.feedback_count,
+      });
+    }
+  }
 
   return {
-    products: page.map(({ id, name, price, link, image }) => ({
-      id,
-      name,
-      price,
-      link,
-      image,
-    })) satisfies Product[],
+    products: page.map(({ id, name, price, link, image }) => {
+      const rating = ratingsByProductId.get(id);
+      return {
+        id,
+        name,
+        price,
+        link,
+        image,
+        averageScore: rating?.averageScore ?? null,
+        feedbackCount: rating?.feedbackCount ?? 0,
+      };
+    }) satisfies Product[],
     nextCursor:
       hasMore && lastProduct
         ? encodeProductCursor({

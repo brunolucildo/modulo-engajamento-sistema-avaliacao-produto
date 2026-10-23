@@ -9,8 +9,10 @@ não houver outra página. Envie o cursor retornado como parâmetro `cursor` na
 próxima requisição. Uma coleção vazia retorna `200` com `products: []` e
 `nextCursor: null`.
 
-Cada produto expõe `id`, `name`, `price`, `link` e `image`. Os quatro campos
-são strings.
+Cada produto expõe `id`, `name`, `price`, `link`, `image`, `averageScore` e
+`feedbackCount`. Os campos de texto são strings; `averageScore` é a média das
+notas arredondada para uma casa decimal ou `null` quando o produto não tem
+avaliações; `feedbackCount` é a quantidade de avaliações.
 
 ## Criar produto
 
@@ -39,3 +41,6 @@ A migration `20261022000000_update_products_fields.sql` migra a tabela para os
 campos `name`, `price`, `link` e `image`, preservando os links e imagens já
 cadastrados. Produtos anteriores à migração recebem `price` vazio; a coluna
 `description` é removida, descartando as descrições já cadastradas.
+
+A migration `20261022000002_create_product_feedback_ratings_view.sql` cria a
+visão agregada que fornece a média e a quantidade de avaliações por produto.

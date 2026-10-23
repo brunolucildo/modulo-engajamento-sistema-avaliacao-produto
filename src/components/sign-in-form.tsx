@@ -14,6 +14,7 @@ type ApiResponse = {
 export function SignInForm() {
   const router = useRouter();
   const [requestError, setRequestError] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const {
     register,
     handleSubmit,
@@ -88,15 +89,52 @@ export function SignInForm() {
 
       <div className="field">
         <label htmlFor="password">Senha</label>
-        <input
-          autoComplete="current-password"
-          id="password"
-          placeholder="Digite sua senha"
-          type="password"
-          {...register("password")}
-          aria-invalid={Boolean(errors.password)}
-          aria-describedby={errors.password ? "password-error" : undefined}
-        />
+        <div className="password-field">
+          <input
+            autoComplete="current-password"
+            id="password"
+            placeholder="Digite sua senha"
+            type={isPasswordVisible ? "text" : "password"}
+            {...register("password")}
+            aria-invalid={Boolean(errors.password)}
+            aria-describedby={errors.password ? "password-error" : undefined}
+          />
+          <button
+            className="password-toggle"
+            type="button"
+            onClick={() => setIsPasswordVisible((visible) => !visible)}
+            aria-label={isPasswordVisible ? "Ocultar senha" : "Mostrar senha"}
+            aria-pressed={isPasswordVisible}
+          >
+            {isPasswordVisible ? (
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.2A10.8 10.8 0 0 1 12 5c5.1 0 8.6 4.8 9.5 6.3a1.3 1.3 0 0 1 0 1.4 15 15 0 0 1-3.1 3.6M6.2 6.2a16.3 16.3 0 0 0-3.7 5.1 1.3 1.3 0 0 0 0 1.4C3.4 14.2 6.9 19 12 19c1 0 1.9-.2 2.8-.5"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.7"
+                />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M2.5 12s3.5-7 9.5-7 9.5 7 9.5 7-3.5 7-9.5 7-9.5-7-9.5-7Z"
+                  stroke="currentColor"
+                  strokeLinejoin="round"
+                  strokeWidth="1.7"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="2.5"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
         {errors.password ? (
           <span className="field-error" id="password-error">
             {errors.password.message}

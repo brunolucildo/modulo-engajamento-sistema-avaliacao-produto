@@ -52,6 +52,10 @@ Open [http://localhost:3000](http://localhost:3000) to browse products.
   creates the account.
 - `POST /api/v1/sign-in`: validates credentials and sets a signed, `HttpOnly`
   session cookie.
+- `POST /api/v1/sign-out`: clears the signed session cookie for the current
+  browser.
+- `POST /api/v1/theme`: saves the `light` or `dark` theme preference for the
+  current browser.
 - `GET /auth/sign-up/success`: sign-up confirmation.
 - `GET /api/v1/products`: returns `{ "products": [], "nextCursor": null }` for
   the public catalog; accepts an optional `cursor` query parameter.
