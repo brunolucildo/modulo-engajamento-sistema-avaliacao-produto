@@ -18,6 +18,20 @@ function isProductsResponse(value: unknown): value is ProductsResponse {
   const response = value as Partial<ProductsResponse>;
   return (
     Array.isArray(response.products) &&
+    response.products.every(
+      (product) =>
+        typeof product === "object" &&
+        product !== null &&
+        typeof product.id === "string" &&
+        typeof product.name === "string" &&
+        typeof product.price === "string" &&
+        typeof product.link === "string" &&
+        typeof product.image === "string" &&
+        (typeof product.averageScore === "number" ||
+          product.averageScore === null) &&
+        Number.isInteger(product.feedbackCount) &&
+        product.feedbackCount >= 0,
+    ) &&
     (typeof response.nextCursor === "string" || response.nextCursor === null)
   );
 }
@@ -51,6 +65,41 @@ function ProductCard({
         <p className="product-card-price">
           {product.price || "Preço não informado"}
         </p>
+        {product.feedbackCount > 0 && product.averageScore !== null ? (
+          <p className="product-card-rating">
+            <span
+              className="product-card-rating-content"
+              role="img"
+              aria-label={`Média ${product.averageScore.toLocaleString(
+                "pt-BR",
+                {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+                },
+              )} de 5, com ${product.feedbackCount} ${
+                product.feedbackCount === 1 ? "avaliação" : "avaliações"
+              }`}
+            >
+              <span className="product-card-rating-star" aria-hidden="true">
+                ★
+              </span>
+              <strong>
+                {product.averageScore.toLocaleString("pt-BR", {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+                })}
+              </strong>
+              <span className="product-card-rating-count">
+                ({product.feedbackCount}{" "}
+                {product.feedbackCount === 1 ? "avaliação" : "avaliações"})
+              </span>
+            </span>
+          </p>
+        ) : (
+          <p className="product-card-rating product-card-rating-empty">
+            Ainda sem avaliações
+          </p>
+        )}
         <a
           className="product-card-link"
           href={product.link}

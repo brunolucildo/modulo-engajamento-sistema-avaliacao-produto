@@ -6,11 +6,59 @@
   --muted: #63738a;
   --blue: #244fb8;
   --blue-deep: #1c3f98;
+  --action-blue: #244fb8;
+  --action-blue-hover: #1c3f98;
   --blue-mist: #dce7f5;
   --coral: #e8795b;
   --paper: #f5f8fc;
   --line: #d9e1ec;
+  --surface: #fff;
+  --surface-muted: #f9fafc;
+  --line-strong: #aebed4;
+  --placeholder: #8794a6;
+  --coral-soft: #fce9e2;
+  --rating-active: #b27c08;
+  --rating-border: #d9a52c;
+  --rating-active-bg: #fff8e7;
+  --warning: #8b4a21;
+  --error: #ad372f;
+  --success: #28744c;
+  --focus-ring: rgb(36 79 184 / 30%);
+  --alert-background: #fff6f3;
+  --alert-border: #f0c9bf;
+  --alert-ink: #91372a;
+  --alert-mark: #b64a3a;
   --font-sans: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #e6edf7;
+  --muted: #a9b7cb;
+  --blue: #82a4ff;
+  --blue-deep: #a8bfff;
+  --action-blue: #3559a8;
+  --action-blue-hover: #294885;
+  --blue-mist: #273a57;
+  --coral: #f08b70;
+  --paper: #111d2d;
+  --line: #34445b;
+  --surface: #19283c;
+  --surface-muted: #202f44;
+  --line-strong: #50617a;
+  --placeholder: #9aa9bd;
+  --coral-soft: #462f35;
+  --rating-active: #f2c65b;
+  --rating-border: #b58d37;
+  --rating-active-bg: #403923;
+  --warning: #ffc18d;
+  --error: #ff9d91;
+  --success: #82d4a3;
+  --focus-ring: rgb(130 164 255 / 38%);
+  --alert-background: #382b32;
+  --alert-border: #653d3d;
+  --alert-ink: #ffb9a8;
+  --alert-mark: #a84d43;
 }
 
 * {
@@ -158,7 +206,7 @@ input {
   display: grid;
   place-items: center;
   padding: 32px clamp(34px, 7vw, 104px);
-  background: #fff;
+  background: var(--surface);
 }
 
 .form-container {
@@ -223,7 +271,7 @@ input {
   border: 1px solid var(--line);
   border-radius: 5px;
   outline: none;
-  background: #f9fafc;
+  background: var(--surface-muted);
   color: var(--ink);
   font-size: 14px;
   transition:
@@ -232,18 +280,58 @@ input {
     box-shadow 150ms ease;
 }
 
+.password-field {
+  position: relative;
+}
+
+.field .password-field input {
+  padding-right: 48px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.password-toggle:hover {
+  background: var(--blue-mist);
+  color: var(--blue-deep);
+}
+
+.password-toggle:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+
+.password-toggle svg {
+  width: 19px;
+  height: 19px;
+}
+
 .field input::placeholder {
-  color: #8794a6;
+  color: var(--placeholder);
 }
 
 .field input:hover {
-  border-color: #aebed4;
+  border-color: var(--line-strong);
 }
 
 .field input:focus {
   border-color: var(--blue);
-  background: #fff;
-  box-shadow: 0 0 0 3px rgb(36 79 184 / 15%);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 .field input[aria-invalid="true"] {
@@ -261,7 +349,7 @@ input {
 }
 
 .field-error {
-  color: #ad372f;
+  color: var(--error);
 }
 
 .form-alert {
@@ -269,10 +357,10 @@ input {
   align-items: flex-start;
   gap: 10px;
   padding: 12px 14px;
-  border: 1px solid #f0c9bf;
+  border: 1px solid var(--alert-border);
   border-radius: 5px;
-  background: #fff6f3;
-  color: #91372a;
+  background: var(--alert-background);
+  color: var(--alert-ink);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -284,7 +372,7 @@ input {
   flex: 0 0 18px;
   place-items: center;
   border-radius: 50%;
-  background: #b64a3a;
+  background: var(--alert-mark);
   color: white;
   font-size: 12px;
   font-weight: 700;
@@ -300,7 +388,7 @@ input {
   padding: 0 17px;
   border: 0;
   border-radius: 5px;
-  background: var(--blue);
+  background: var(--action-blue);
   color: white;
   cursor: pointer;
   font-size: 14px;
@@ -310,11 +398,11 @@ input {
 }
 
 .submit-button:hover:not(:disabled) {
-  background: var(--blue-deep);
+  background: var(--action-blue-hover);
 }
 
 .submit-button:focus-visible {
-  outline: 3px solid rgb(36 79 184 / 32%);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -330,7 +418,7 @@ input {
 
 .privacy-note {
   margin: 20px 0 0;
-  color: #758298;
+  color: var(--muted);
   font-size: 12px;
   line-height: 1.6;
 }
@@ -348,7 +436,7 @@ input {
   padding: 48px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: white;
+  background: var(--surface);
   text-align: center;
 }
 

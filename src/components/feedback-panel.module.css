@@ -3,8 +3,8 @@
   gap: 16px;
   margin-top: 30px;
   padding: 20px 22px;
-  border-left: 3px solid #5367c9;
-  background: #f1f3ff;
+  border-left: 3px solid var(--platform-blue);
+  background: var(--platform-mist);
 }
 
 .summaryIcon {
@@ -14,8 +14,8 @@
   flex: 0 0 40px;
   place-items: center;
   border-radius: 50%;
-  background: #e0e5ff;
-  color: #4054b4;
+  background: var(--platform-surface);
+  color: var(--platform-blue-deep);
   font-size: 22px;
 }
 
@@ -31,7 +31,7 @@
 
 .summaryHeading h2 {
   margin: 0;
-  color: #172842;
+  color: var(--platform-ink);
   font-size: 18px;
   font-weight: 650;
   letter-spacing: -0.03em;
@@ -44,10 +44,10 @@
   align-items: center;
   justify-content: center;
   padding: 0 6px;
-  border: 1px solid #c7cff8;
+  border: 1px solid var(--platform-line);
   border-radius: 4px;
-  background: #fff;
-  color: #4054b4;
+  background: var(--platform-surface);
+  color: var(--platform-blue-deep);
   font-size: 10px;
   font-weight: 750;
   letter-spacing: 0.04em;
@@ -56,7 +56,7 @@
 .summaryContent > p {
   max-width: 760px;
   margin: 9px 0 0;
-  color: #43556e;
+  color: var(--platform-muted);
   font-size: 14px;
   line-height: 1.7;
   overflow-wrap: anywhere;
@@ -65,12 +65,12 @@
 .summaryContent .summaryMeta {
   display: inline-block;
   margin-top: 10px;
-  color: #68769b;
+  color: var(--platform-muted);
   font-size: 12px;
 }
 
 .summaryContent > .summaryWarning {
-  color: #8b4a21;
+  color: var(--warning);
   font-size: 12px;
 }
 
@@ -87,7 +87,7 @@
 
 .sectionHeading h2 {
   margin: 0;
-  color: #172842;
+  color: var(--platform-ink);
   font-size: clamp(26px, 4vw, 34px);
   font-weight: 650;
   letter-spacing: -0.055em;
@@ -95,7 +95,7 @@
 
 .sectionHeading p {
   margin: 7px 0 0;
-  color: #63738a;
+  color: var(--platform-muted);
   font-size: 14px;
 }
 
@@ -105,9 +105,9 @@
   gap: 18px 28px;
   margin-bottom: 36px;
   padding: 24px;
-  border: 1px solid #d9e1ec;
+  border: 1px solid var(--platform-line);
   border-radius: 7px;
-  background: #fff;
+  background: var(--platform-surface);
 }
 
 .formIntro {
@@ -118,7 +118,7 @@
 .loginPrompt h3,
 .emptyState h3 {
   margin: 0;
-  color: #172842;
+  color: var(--platform-ink);
   font-size: 17px;
   font-weight: 650;
   letter-spacing: -0.025em;
@@ -128,7 +128,7 @@
 .loginPrompt p,
 .emptyState p {
   margin: 6px 0 0;
-  color: #63738a;
+  color: var(--platform-muted);
   font-size: 13px;
   line-height: 1.6;
 }
@@ -142,7 +142,7 @@
 
 .scoreField legend,
 .commentField {
-  color: #172842;
+  color: var(--platform-ink);
   font-size: 13px;
   font-weight: 650;
 }
@@ -159,9 +159,9 @@
   width: 37px;
   height: 37px;
   place-items: center;
-  border: 1px solid #d9e1ec;
+  border: 1px solid var(--platform-line);
   border-radius: 5px;
-  color: #96a2b2;
+  color: var(--platform-muted);
   cursor: pointer;
   font-size: 20px;
   transition:
@@ -171,13 +171,19 @@
 }
 
 .scoreOption:has(input:checked) {
-  border-color: #d9a52c;
-  background: #fff8e7;
-  color: #b27c08;
+  border-color: var(--rating-border);
+  background: var(--rating-active-bg);
+  color: var(--rating-active);
+}
+
+.scoreOptionActive {
+  border-color: var(--rating-border);
+  background: var(--rating-active-bg);
+  color: var(--rating-active);
 }
 
 .scoreOption:has(input:focus-visible) {
-  outline: 3px solid rgb(36 79 184 / 30%);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -207,11 +213,11 @@
   min-height: 105px;
   resize: vertical;
   padding: 11px 12px;
-  border: 1px solid #d9e1ec;
+  border: 1px solid var(--platform-line);
   border-radius: 5px;
   outline: none;
-  background: #f9fafc;
-  color: #172842;
+  background: var(--platform-surface-muted);
+  color: var(--platform-ink);
   font: inherit;
   font-size: 14px;
   font-weight: 400;
@@ -219,13 +225,13 @@
 }
 
 .commentField textarea::placeholder {
-  color: #8794a6;
+  color: var(--placeholder);
 }
 
 .commentField textarea:focus {
-  border-color: #244fb8;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgb(36 79 184 / 15%);
+  border-color: var(--platform-blue);
+  background: var(--platform-surface);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 .commentField textarea:disabled {
@@ -235,7 +241,7 @@
 
 .characterCount {
   align-self: flex-end;
-  color: #77869a;
+  color: var(--platform-muted);
   font-size: 11px;
   font-weight: 400;
 }
@@ -249,11 +255,11 @@
 }
 
 .error {
-  color: #ad372f;
+  color: var(--error);
 }
 
 .success {
-  color: #28744c;
+  color: var(--success);
 }
 
 .submitButton,
@@ -266,7 +272,7 @@
   padding: 0 16px;
   border: 0;
   border-radius: 5px;
-  background: #244fb8;
+  background: var(--platform-action);
   color: #fff;
   cursor: pointer;
   font: inherit;
@@ -278,12 +284,12 @@
 
 .submitButton:hover:not(:disabled),
 .loginButton:hover {
-  background: #1c3f98;
+  background: var(--platform-action-hover);
 }
 
 .submitButton:focus-visible,
 .loginButton:focus-visible {
-  outline: 3px solid rgb(36 79 184 / 32%);
+  outline: 3px solid var(--platform-focus);
   outline-offset: 3px;
 }
 
@@ -298,8 +304,8 @@
   gap: 17px;
   margin-bottom: 36px;
   padding: 20px 22px;
-  border-left: 3px solid #e8795b;
-  background: #fff;
+  border-left: 3px solid var(--platform-coral);
+  background: var(--platform-surface);
 }
 
 .loginMark {
@@ -309,8 +315,8 @@
   flex: 0 0 40px;
   place-items: center;
   border-radius: 50%;
-  background: #fce9e2;
-  color: #bd5135;
+  background: var(--platform-coral-soft);
+  color: var(--platform-coral);
   font-size: 22px;
 }
 
@@ -319,12 +325,12 @@
 }
 
 .feedbackList {
-  border-top: 1px solid #d9e1ec;
+  border-top: 1px solid var(--platform-line);
 }
 
 .feedbackItem {
   padding: 22px 0;
-  border-bottom: 1px solid #d9e1ec;
+  border-bottom: 1px solid var(--platform-line);
 }
 
 .feedbackHeader {
@@ -335,7 +341,7 @@
 }
 
 .feedbackHeader time {
-  color: #77869a;
+  color: var(--platform-muted);
   font-size: 12px;
 }
 
@@ -347,17 +353,17 @@
 }
 
 .starFilled {
-  color: #b27c08;
+  color: var(--rating-active);
 }
 
 .starEmpty {
-  color: #d7dce4;
+  color: var(--platform-line-strong);
 }
 
 .feedbackItem > p {
   max-width: 760px;
   margin: 12px 0 0;
-  color: #43556e;
+  color: var(--platform-muted);
   font-size: 14px;
   line-height: 1.75;
   white-space: pre-wrap;
@@ -371,7 +377,7 @@
 .emptyMark {
   display: block;
   margin-bottom: 12px;
-  color: #b27c08;
+  color: var(--rating-active);
   font-size: 24px;
 }
 

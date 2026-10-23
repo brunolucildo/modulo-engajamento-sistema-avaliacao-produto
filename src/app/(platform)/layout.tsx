@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { PlatformUserMenu } from "@/components/platform-user-menu";
 import { getCurrentUser } from "@/lib/auth-session";
 import "./platform.css";
 
@@ -35,7 +37,9 @@ export default async function PlatformLayout({
 }: {
   children: ReactNode;
 }) {
-  const user = await getCurrentUser();
+  const [user, cookieStore] = await Promise.all([getCurrentUser(), cookies()]);
+  const theme =
+    cookieStore.get("engaja_theme")?.value === "dark" ? "dark" : "light";
   const displayName = user ? `${user.firstName} ${user.lastName}`.trim() : "";
   const avatarSeed = user
     ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase()
@@ -56,18 +60,12 @@ export default async function PlatformLayout({
           </nav>
           <div className="platform-account">
             {user ? (
-              <div
-                className="platform-user"
-                title={`${displayName} — ${user.email}`}
-              >
-                <span className="platform-avatar" aria-hidden="true">
-                  {avatarSeed}
-                </span>
-                <span className="platform-user-copy">
-                  <span className="platform-user-name">{displayName}</span>
-                  <span className="platform-user-email">{user.email}</span>
-                </span>
-              </div>
+              <PlatformUserMenu
+                displayName={displayName}
+                email={user.email}
+                avatarSeed={avatarSeed}
+                initialTheme={theme}
+              />
             ) : (
               <Link className="platform-login" href="/auth/sign-in">
                 Entrar
